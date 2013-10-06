@@ -1,0 +1,10 @@
+[
+	{ 
+		"caption": "Keymap Manager: Remap Key", 
+		"command": "km_remap_key"
+	},
+	{ 
+		"caption": "Keymap Manager: Update Keys", 
+		"command": "km_update_keys"
+	}
+]
