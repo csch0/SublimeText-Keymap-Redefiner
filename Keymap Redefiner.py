@@ -3,7 +3,7 @@ import sublime_plugin
 
 import os
 
-from .keymap_redifiner import tools
+from .keymap_redefiner import tools
 
 
 class KeyReRemapKeyCommand(sublime_plugin.WindowCommand):

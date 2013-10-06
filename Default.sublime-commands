@@ -1,14 +1,14 @@
 [
 	{ 
-		"caption": "Keymap Redefiner: Define a new Keymap", 
+		"caption": "Keymap Redefiner: Define Keymap", 
 		"command": "key_re_remap_key"
 	},
 	{ 
-		"caption": "Keymap Redefiner: Update all Keymaps", 
+		"caption": "Keymap Redefiner: Update Keymaps", 
 		"command": "key_re_update_keys"
 	},
 	{ 
-		"caption": "Keymap Redefiner: Restore original Keymap", 
+		"caption": "Keymap Redefiner: Remove Keymap", 
 		"command": "key_re_remove_key"
 	}
 ]
