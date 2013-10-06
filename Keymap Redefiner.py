@@ -64,6 +64,7 @@ class KeyReRemapKeyCommand(sublime_plugin.WindowCommand):
 
         # Save resource
         tools.save_resource("Packages/User/%s" % os.path.basename(self.source_resource), tools.encode_value(resource))
+        sublime.status_message("Keymap Redefiner: %s was successfully redefined to %s" % (" ".join(self.source_keys), " ".join(self.target_key)))
 
 
 class KeyReUpdateKeysCommand(sublime_plugin.ApplicationCommand):
@@ -141,6 +142,7 @@ class KeyReRemoveKeyCommand(sublime_plugin.WindowCommand):
 
         # Save resource
         tools.save_resource("Packages/User/%s" % os.path.basename(self.km_source), tools.encode_value(resource))
+        sublime.status_message("Keymap Redefiner: %s was successfully and reset to %s" % (" ".join(self.km_keys), " ".join(self.key)))
 
 
 def plugin_loaded():
