@@ -114,7 +114,7 @@ class KeyReRemoveKeyCommand(sublime_plugin.WindowCommand):
             for key in tools.decode_value(tools.load_resource(resource)):
                 if "km_keys" in key and "km_source" in key:
                     item = {"keys": key["keys"], "km_keys": key["km_keys"], "km_source": key["km_source"]}
-                    items += [item]
+                    items += [item] if item not in items else []
 
         # Save items sorted
         self.items = sorted(items, key=lambda x: " ".join(x["keys"]).lower())
