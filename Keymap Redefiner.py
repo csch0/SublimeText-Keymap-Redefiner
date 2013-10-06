@@ -3,10 +3,10 @@ import sublime_plugin
 
 import os
 
-from .keymap_manager import tools
+from .keymap_redifiner import tools
 
 
-class KmRemapKeyCommand(sublime_plugin.WindowCommand):
+class KeyReRemapKeyCommand(sublime_plugin.WindowCommand):
 
     items = []
 
@@ -66,7 +66,7 @@ class KmRemapKeyCommand(sublime_plugin.WindowCommand):
         tools.save_resource("Packages/User/%s" % os.path.basename(self.source_resource), tools.encode_value(resource))
 
 
-class KmUpdateKeysCommand(sublime_plugin.ApplicationCommand):
+class KeyReUpdateKeysCommand(sublime_plugin.ApplicationCommand):
 
     def run(self):
         # Search through all file names
@@ -99,7 +99,7 @@ class KmUpdateKeysCommand(sublime_plugin.ApplicationCommand):
             tools.save_resource("Packages/User/%s" % name, tools.encode_value(resource))
 
 
-class KmRemoveKeyCommand(sublime_plugin.WindowCommand):
+class KeyReRemoveKeyCommand(sublime_plugin.WindowCommand):
 
     def run(self):
 
@@ -144,6 +144,6 @@ class KmRemoveKeyCommand(sublime_plugin.WindowCommand):
 
 
 def plugin_loaded():
-    s = sublime.load_settings("Keymap Manager.sublime-settings")
+    s = sublime.load_settings("Keymap Redefiner.sublime-settings")
     if s.get("auto_update"):
-        sublime.run_command("km_update_keys")
+        sublime.run_command("key_re_update_keys")
