@@ -2,7 +2,18 @@ import sublime
 import sublime_plugin
 
 import codecs
+import json
 import os
+import re
+
+
+def find_names():
+    if sublime.platform() == "windows":
+        return ["Default.sublime-keymap", "Default (Windows).sublime-keymap"]
+    elif sublime.platform() == "osx":
+        return ["Default.sublime-keymap", "Default (OSX).sublime-keymap"]
+    else:
+        return ["Default.sublime-keymap", "Default (Linux).sublime-keymap"]
 
 
 def find_resources(pattern):
@@ -45,8 +56,41 @@ def decode_value(string):
 
 
 def encode_value(value, pretty=True):
-    if hasattr(sublime, 'encode_value'):
-        return sublime.encode_value(value, pretty)
-    else:
-        lines = [line for line in string.split("\n") if not re.search(r'//.*', line)]
-        return json.loads("\n".join(lines))
+    lstItems = []
+    for objItem in sorted(value, key=lambda x: x["keys"]):
+        lstFields = []
+        # strItem = "\n\t{"
+        lstFields += ["\"keys\": " + json.dumps(objItem["keys"], ensure_ascii=False)]
+        if "command" in objItem:
+            lstFields += ["\"command\": " + json.dumps(objItem["command"], ensure_ascii=False) + (", \"args\": " + json.dumps(objItem["args"], ensure_ascii=False) if "args" in objItem else "")]
+        if "context" in objItem:
+            lstFields += ["\"context\": [" + ",".join(["\n\t\t\t" + json.dumps(item, ensure_ascii=False) for item in sorted(objItem["context"], key=lambda x: x["key"])]) + "\n\t\t]"]
+        if "km_keys" in objItem:
+            lstFields += ["\"km_keys\": " + json.dumps(objItem["km_keys"], ensure_ascii=False)]
+        if "km_source" in objItem:
+            lstFields += ["\"km_source\": " + json.dumps(objItem["km_source"], ensure_ascii=False)]
+        lstItems += ["\n\t{\n\t\t" + ",\n\t\t".join(lstFields) + "\n\t}"]
+    value = "[" + ",".join(lstItems) + "\n]"
+    return value
+
+
+def find_item(value, km_keys, km_source):
+    for item in value:
+        if "km_keys" in item and "km_source" in item:
+            if item["km_keys"] == km_keys and item["km_source"] == km_source:
+                # print("found", item)
+                return item
+    return None
+
+
+# def update_item(value, km_keys, km_source):
+
+def clear_resource(value, items):
+    # print(items)
+    for item in items:
+        while True:
+            try:
+                value.remove(find_item(value, item["km_keys"], item["km_source"]))
+            except:
+                break
+    return value

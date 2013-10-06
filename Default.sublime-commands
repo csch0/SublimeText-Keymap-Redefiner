@@ -6,5 +6,9 @@
 	{ 
 		"caption": "Keymap Manager: Update Keys", 
 		"command": "km_update_keys"
+	},
+	{ 
+		"caption": "Keymap Manager: Restore Key", 
+		"command": "km_remove_key"
 	}
 ]
