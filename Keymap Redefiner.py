@@ -17,7 +17,7 @@ class KeyReRemapKeyCommand(sublime_plugin.WindowCommand):
 
         items = []
         for resource in sorted(tools.find_resources("*.sublime-keymap"), key=lambda x: x.lower()):
-            print(resource)
+
             # Filter platform keymap
             if not any([n in resource for n in tools.find_names()]) or resource[:14] == "Packages/User/":
                 continue

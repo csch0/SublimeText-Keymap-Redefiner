@@ -85,15 +85,11 @@ def find_item(value, km_keys, km_source):
     for item in value:
         if "km_keys" in item and "km_source" in item:
             if item["km_keys"] == km_keys and item["km_source"] == km_source:
-                # print("found", item)
                 return item
     return None
 
 
-# def update_item(value, km_keys, km_source):
-
 def clear_resource(value, items):
-    # print(items)
     for item in items:
         while True:
             try:
