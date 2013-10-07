@@ -2,6 +2,7 @@ import sublime
 import sublime_plugin
 
 import codecs
+import fnmatch
 import json
 import os
 import re
@@ -34,10 +35,10 @@ def load_resource(name):
         if hasattr(sublime, 'load_resource'):
             return sublime.load_resource(name)
         else:
-            with open(os.path.join(sublime.packages_path(), name[9:])) as f:
+            with codecs.open(os.path.join(sublime.packages_path(), name[9:]), "r", "utf-8") as f:
                 return f.read()
     except:
-        return None
+        return ""
 
 
 def save_resource(name, string):
@@ -46,13 +47,15 @@ def save_resource(name, string):
 
 
 def decode_value(string):
-    if not string:
+    try:
+        if hasattr(sublime, 'decode_value'):
+            return sublime.decode_value(string)
+        else:
+            string = re.sub(re.compile(r"//.*?\n"), "", string)
+            string = re.sub(re.compile(r"/\*.*?\*/", re.DOTALL), "", string)
+            return json.loads(string)
+    except:
         return []
-    if hasattr(sublime, 'decode_value'):
-        return sublime.decode_value(string)
-    else:
-        lines = [line for line in string.split("\n") if not re.search(r'//.*', line)]
-        return json.loads("\n".join(lines))
 
 
 def encode_value(value, pretty=True):

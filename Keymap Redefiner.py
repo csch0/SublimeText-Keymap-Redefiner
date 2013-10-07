@@ -3,7 +3,10 @@ import sublime_plugin
 
 import os
 
-from .keymap_redefiner import tools
+try:
+    from .keymap_redefiner import tools
+except ValueError:
+    from keymap_redefiner import tools
 
 
 class KeyReRemapKeyCommand(sublime_plugin.WindowCommand):
@@ -14,6 +17,7 @@ class KeyReRemapKeyCommand(sublime_plugin.WindowCommand):
 
         items = []
         for resource in sorted(tools.find_resources("*.sublime-keymap"), key=lambda x: x.lower()):
+            print(resource)
             # Filter platform keymap
             if not any([n in resource for n in tools.find_names()]) or resource[:14] == "Packages/User/":
                 continue
@@ -69,7 +73,12 @@ class KeyReRemapKeyCommand(sublime_plugin.WindowCommand):
 
 class KeyReUpdateKeysCommand(sublime_plugin.ApplicationCommand):
 
-    def run(self):
+    def run(self, startup=False):
+
+        # Cancel if startup source and no auto_update
+        if startup and not sublime.load_settings("Keymap Redefiner.sublime-settings").get("auto_update"):
+            return
+
         # Search through all file names
         for name in tools.find_names():
             # Load resource
@@ -146,6 +155,7 @@ class KeyReRemoveKeyCommand(sublime_plugin.WindowCommand):
 
 
 def plugin_loaded():
-    s = sublime.load_settings("Keymap Redefiner.sublime-settings")
-    if s.get("auto_update"):
-        sublime.run_command("key_re_update_keys")
+    sublime.set_timeout(lambda: sublime.run_command("key_re_update_keys", {"startup": True}), 500)
+
+if sublime.version()[0] == "2":
+    plugin_loaded()
