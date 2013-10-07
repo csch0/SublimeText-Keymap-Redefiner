@@ -33,12 +33,14 @@ def find_resources(pattern):
 def load_resource(name):
     try:
         if hasattr(sublime, 'load_resource'):
-            return sublime.load_resource(name)
+            string = sublime.load_resource(name)
         else:
             with codecs.open(os.path.join(sublime.packages_path(), name[9:]), "r", "utf-8") as f:
-                return f.read()
+                string = f.read()
     except:
-        return ""
+        string = None
+
+    return string if string else ""
 
 
 def save_resource(name, string):
@@ -49,13 +51,15 @@ def save_resource(name, string):
 def decode_value(string):
     try:
         if hasattr(sublime, 'decode_value'):
-            return sublime.decode_value(string)
+            value = sublime.decode_value(string)
         else:
             string = re.sub(re.compile(r"//.*?\n"), "", string)
             string = re.sub(re.compile(r"/\*.*?\*/", re.DOTALL), "", string)
-            return json.loads(string)
+            value = json.loads(string)
     except:
-        return []
+        value = None
+
+    return value if value else []
 
 
 def encode_value(value, pretty=True):
