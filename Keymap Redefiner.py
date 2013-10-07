@@ -47,7 +47,7 @@ class KeyReRemapKeyCommand(sublime_plugin.WindowCommand):
         if not s:
             return
 
-        self.target_key = s
+        self.target_key = [c.strip() for c in s.split(" ")]
         self.on_done()
 
     def on_done(self):
@@ -62,7 +62,7 @@ class KeyReRemapKeyCommand(sublime_plugin.WindowCommand):
             # Save infos to handle later updates and update keys itself
             item["km_keys"] = self.source_keys
             item["km_source"] = self.source_resource
-            item["keys"] = [s.strip() for s in self.target_key.split(" ")]
+            item["keys"] = self.target_key
 
             resource += [item]
 
